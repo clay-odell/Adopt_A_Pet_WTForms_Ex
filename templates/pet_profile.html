@@ -1,19 +1,31 @@
 {% extends "base.html" %} {% block title %}{{pet.name}} Profile{% endblock %} {%
 block main %}
+<br />
 <h1 class="display-4 text-center">{{pet.name}}'s Information</h1>
+<br />
 <div class="container-fluid">
-<ul class="list-unstyled">
-  <li><strong>Picture</strong>: <br><img src="{{pet.photo_url}}" class="rounded-float-left" style="height: 150px; width: 200px"></li>
-  <li><strong>Name</strong>: {{pet.name}}</li>
-  <li><strong>Species</strong>: {{pet.species}}</li>
-  <li><strong>Age</strong>: {{pet.age}} years old</li>
-  <li><strong>Notes</strong>: {{pet.notes}}</li>
-</ul>
+  <ul class="list-unstyled">
+    <li>
+      <strong>Picture</strong>: <br /><img
+        src="{{pet.photo_url}}"
+        class="rounded-float-left"
+        style="height: 150px; width: 200px"
+      />
+    </li>
+    <li><strong>Name</strong>: {{pet.name}}</li>
+    <li><strong>Species</strong>: {{pet.species}}</li>
+    <li><strong>Age</strong>: {{pet.age}} years old</li>
+    <li><strong>Notes</strong>: {{pet.notes}}</li>
+  </ul>
 </div>
 <div class="container-fluid">
-<form action="/edit">
-<button class="btn btn-success form-control-sm">Edit {{pet.name}}'s Information</button>
-</form>
-
-
+  <h4 class="display-5">Edit {{ pet.name }}:</h4>
+  <form class="form-control-sm" method="POST">
+    {{ form.hidden_tag() }} {% for field in form if field.widget.input_type
+    !='hidden' %} {{ field.label }} <br />
+    {{ field() }} <br />
+    {% endfor %}
+    <button class="btn btn-danger">Edit Profile</button>
+  </form>
+</div>
 {% endblock %}
