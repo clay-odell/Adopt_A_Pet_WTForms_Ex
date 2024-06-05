@@ -28,14 +28,8 @@ def add_pet():
     """Add A Pet Form and Handling"""
     form = AddPetForm()
     if form.validate_on_submit():
-        name = form.name.data
-        species = form.species.data
-        photo_url = form.photo_url.data
-        age = form.age.data
-        notes = form.notes.data
-        new_pet = Pet(name=name, species=species, photo_url=photo_url, age=age, notes=notes)
-        db.session.add(new_pet)
-        db.session.commit()
+        new_pet = Pet(**form.data)
+        new_pet.save()
         return redirect('/')
     else: 
         return render_template('add_pet.html', form=form)
@@ -43,13 +37,11 @@ def add_pet():
 @app.route('/<int:pet_id>', methods=['GET', 'POST'])
 def show_and_edit_pet_profile(pet_id):
     pet = Pet.query.get_or_404(pet_id)
-    form = EditPetForm()
-    form.photo_url.render_kw = {'placeholder': pet.photo_url}
+    form = EditPetForm(obj=pet)
+    
     if form.validate_on_submit():
-        pet.photo_url = form.photo_url.data
-        pet.notes = form.notes.data
-        pet.available = form.available.data
-        db.session.commit()
+        form.populate_obj(pet)
+        pet.save()
         return redirect(f'/{pet_id}')
     else:
         return render_template('pet_profile.html', pet=pet, form=form)
